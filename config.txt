@@ -1,0 +1,5 @@
+kill-script=pkill -f geyser.jar
+auto-update=true
+download-url=https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/standalone
+kill=false
+geyser-jar=geyser.jar
