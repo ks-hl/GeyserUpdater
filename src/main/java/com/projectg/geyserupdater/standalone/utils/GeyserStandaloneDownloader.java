@@ -3,10 +3,11 @@ package com.projectg.geyserupdater.standalone.utils;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.standalone.StandaloneUpdater;
+import dev.kshl.kshlib.net.NetUtil;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 public class GeyserStandaloneDownloader {
 
@@ -73,8 +74,13 @@ public class GeyserStandaloneDownloader {
         }
     }
 
-    public static String getLatestGeyserCommitFromJenkins(String gitBranch) {
-        UpdaterLogger.getLogger().debug("Running getLatestGeyserBuildNumberFromJenkins()");
-        return WebUtils.getBody("https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + gitBranch + "/lastSuccessfulBuild/api/xml?xpath=//commitId").replaceAll("<(\\\\)?(/)?commitId>", "").trim();
+    public static String getNewSha256() throws IOException {
+        JSONObject json = NetUtil.getResponse("https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest", true).json();
+        if (json == null) return null;
+        json = json.optJSONObject("downloads");
+        if (json == null) return null;
+        json = json.optJSONObject("standalone");
+        if (json == null) return null;
+        return json.optString("sha256");
     }
 }

@@ -1,7 +1,6 @@
 package com.projectg.geyserupdater.standalone.utils;
 
-import org.jetbrains.annotations.Nullable;
-
+import javax.annotation.Nullable;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

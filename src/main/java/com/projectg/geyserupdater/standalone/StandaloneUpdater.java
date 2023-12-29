@@ -5,6 +5,7 @@ import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.standalone.utils.ConfigLoader;
 import com.projectg.geyserupdater.standalone.utils.FileUtil;
 import com.projectg.geyserupdater.standalone.utils.GeyserStandaloneDownloader;
+import com.projectg.geyserupdater.standalone.utils.ShaUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,14 +69,17 @@ public class StandaloneUpdater {
     }
 
     public void checkForUpdate() throws IOException {
-        String jenkinsVersion = GeyserStandaloneDownloader.getLatestGeyserCommitFromJenkins(branch);
-        String currentVersion = FileUtil.getCommitID(new File(getRootDirectory(), geyser_jar));
-        if (Objects.equals(jenkinsVersion, currentVersion)) {
+        String newHash = GeyserStandaloneDownloader.getNewSha256();
+        File jarFile = new File(getRootDirectory(), geyser_jar);
+        String currentVersion = FileUtil.getCommitID(jarFile);
+        String currentHash = ShaUtils.sha256(jarFile.getAbsolutePath());
+        if (Objects.equals(newHash, currentHash)) {
             System.out.println("Latest version already installed!");
             return;
         }
         System.out.println("Current version: " + currentVersion);
-        System.out.println("Newest version: " + jenkinsVersion);
+        System.out.println("Current SHA256 hash: " + currentHash);
+        System.out.println("New SHA256 hash: " + newHash);
         GeyserStandaloneDownloader.updateGeyser();
     }
 
